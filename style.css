@@ -5,7 +5,7 @@
 }
 
 body {
-  background-image: linear-gradient(120deg, #f6d365, #fda085);
+  background-image: linear-gradient(120deg, #f07878, #2d86b9);
   color: white;
   font-family: "Source Sans Pro", sans-serif;
   min-height: 100vh;
@@ -32,29 +32,29 @@ form button {
 }
 
 form button {
-  color: #fda085;
+  color: #00578a;
   background: white;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 form button:hover {
-  background: #fda085;
+  background: #00578a;
   color: white;
 }
 
-.todo-container {
+.task-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.todo-list {
+.task-list {
   min-width: 30%;
   list-style: none;
 }
 
-.todo {
+.task {
   margin: 0.5rem;
   background: white;
   color: black;
@@ -65,13 +65,13 @@ form button:hover {
   transition: all 0.5s ease;
 }
 
-.todo li {
+.task li {
   flex: 1;
 }
 
 .trash-btn,
 .complete-btn {
-  background: #ce3207;
+  background: #5e2a00;
   color: white;
   border: none;
   padding: 1rem;
@@ -80,10 +80,10 @@ form button:hover {
 }
 
 .complete-btn {
-  background-color: green;
+  background-color: #00578a;
 }
 
-todo-item {
+task-item {
   padding: 0rem, 0.5rem;
 }
 
@@ -117,7 +117,7 @@ select {
 }
 
 select {
-  color: blue;
+  color: #00578a;
   width: 10rem;
   cursor: pointer;
   padding: 1rem;
@@ -126,7 +126,7 @@ select {
 .select::after {
   content: "\25BC";
   position: absolute;
-  background: blue;
+  background: #00578a;
   top: 0;
   right: 0;
   padding: 1rem;
@@ -136,5 +136,5 @@ select {
 
 .select:hover::after {
   background: white;
-  color: red;
+  color: #00578a;
 }
