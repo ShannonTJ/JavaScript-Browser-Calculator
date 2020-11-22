@@ -14,9 +14,9 @@ filterOption.addEventListener("click", filterTask);
 
 function loadTasks() {
   //Check local storage
-  let tasks = checkLocal();
+  let { completeTasks, incompleteTasks } = checkLocal();
 
-  tasks.forEach(function (task) {
+  incompleteTasks.forEach(function (task) {
     //Create div
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("task");
@@ -33,6 +33,29 @@ function loadTasks() {
     //Append to ul
     taskList.appendChild(taskDiv);
   });
+
+  displayTasks(taskList, filterOption.value);
+
+  completeTasks.forEach(function (task) {
+    //Create div
+    const taskDiv = document.createElement("div");
+    taskDiv.classList.add("task");
+    taskDiv.classList.add("completed");
+
+    //create li
+    const newTask = document.createElement("li");
+    newTask.innerText = task;
+    newTask.classList.add("task-item");
+
+    taskDiv.appendChild(newTask);
+
+    createButtons(taskDiv);
+
+    //Append to ul
+    taskList.appendChild(taskDiv);
+  });
+
+  displayTasks(taskList, filterOption.value);
 }
 
 function addTask(event) {
@@ -52,7 +75,7 @@ function addTask(event) {
     taskDiv.appendChild(newTask);
 
     //add to local storage
-    saveToLocal(taskInput.value);
+    saveToLocal(newTask);
 
     createButtons(taskDiv);
 
@@ -86,9 +109,12 @@ function removeTask(event) {
   } else if (btnPressed.classList[0] === "complete-btn") {
     //Add strikethrough
     const task = btnPressed.parentElement;
+
     task.classList.toggle("completed");
 
     //If a task is toggled, it will display on different dropdown selections
+    removeLocal(task);
+    saveToLocal(task);
     displayTasks(taskList, filterOption.value);
   }
 }
@@ -128,30 +154,45 @@ function displayTasks(taskList, value) {
 
 function saveToLocal(task) {
   //Check local storage
-  let tasks = checkLocal();
+  let { completeTasks, incompleteTasks } = checkLocal();
 
-  tasks.push(task);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  if (task.classList.contains("completed")) {
+    completeTasks.push(task.textContent);
+    localStorage.setItem("completeTasks", JSON.stringify(completeTasks));
+  } else if (!task.classList.contains("completed")) {
+    incompleteTasks.push(task.textContent);
+    localStorage.setItem("incompleteTasks", JSON.stringify(incompleteTasks));
+  }
 }
 
 function removeLocal(task) {
   //Check local storage
-  let tasks = checkLocal();
+  let { completeTasks, incompleteTasks } = checkLocal();
 
-  const taskIndex = tasks.indexOf(task.children[0].innerText);
-  tasks.splice(taskIndex, 1);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  if (completeTasks.includes(task.textContent)) {
+    const taskIndex = completeTasks.indexOf(task.children[0].innerText);
+    completeTasks.splice(taskIndex, 1);
+    localStorage.setItem("completeTasks", JSON.stringify(completeTasks));
+  }
+  if (incompleteTasks.includes(task.textContent)) {
+    const taskIndex = incompleteTasks.indexOf(task.children[0].innerText);
+    incompleteTasks.splice(taskIndex, 1);
+    localStorage.setItem("incompleteTasks", JSON.stringify(incompleteTasks));
+  }
 }
 
 function checkLocal() {
   //Check local storage
-  let tasks;
-  if (localStorage.getItem("tasks") === null) {
-    tasks = [];
-  } else {
-    tasks = JSON.parse(localStorage.getItem("tasks"));
+  let completeTasks = [];
+  let incompleteTasks = [];
+
+  if (localStorage.getItem("completeTasks") !== null) {
+    completeTasks = JSON.parse(localStorage.getItem("completeTasks"));
   }
-  return tasks;
+  if (localStorage.getItem("incompleteTasks") !== null) {
+    incompleteTasks = JSON.parse(localStorage.getItem("incompleteTasks"));
+  }
+  return { completeTasks, incompleteTasks };
 }
 
 function createButtons(taskDiv) {
